@@ -1,5 +1,4 @@
-// const rp = require('request-promise');
-// const { badRequestError } = require('../errors');
+const { badRequestError } = require('../errors');
 const userModel = require('../models').user;
 const logger = require('.././logger');
 
@@ -15,4 +14,7 @@ exports.signUp = user =>
       logger.info(`${u.firstName}`);
       return u;
     })
-    .catch(error => logger.info(error));
+    .catch(error => {
+      logger.info(error);
+      throw badRequestError(error.message);
+    });
