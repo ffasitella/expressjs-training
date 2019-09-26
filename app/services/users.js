@@ -1,4 +1,5 @@
 const { badRequestError } = require('../errors');
+const { defaultError } = require('../errors');
 const userModel = require('../models').user;
 const logger = require('.././logger');
 
@@ -16,5 +17,8 @@ exports.signUp = user =>
     })
     .catch(error => {
       logger.info(error);
+      if (error.name === 'SequelizeUniqueConstraintError') {
+        throw defaultError('Email is already in use');
+      }
       throw badRequestError(error.message);
     });
