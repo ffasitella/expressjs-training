@@ -1,7 +1,7 @@
 const userService = require('../services/users');
 const bcryptService = require('../services/encryption');
 const errors = require('../errors');
-const passwordRegex = /^[0-9a-z]+$/;
+const passwordRegex = /"^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"/;
 
 exports.signUp = (req, res, next) => {
   if (!req.body.firstName) {

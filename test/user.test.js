@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require('../app');
-// const userModel = require('../app/models').user;
 
 describe('SignUp tests', () => {
   test('Succesful case', () => {
@@ -18,26 +17,6 @@ describe('SignUp tests', () => {
       });
   });
 
-  // test('Email is already in use', () => {
-  //   const userToCreate = {
-  //     email: 'user@wolox.com.ar',
-  //     name: 'new',
-  //     lastName: 'user',
-  //     password: 'Asd123*'
-  //   };
-  //   request(app)
-  //     .post('/users')
-  //     .send(userToCreate)
-  //     .then(() => {
-  //       request(app)
-  //         .post('/users')
-  //         .send(userToCreate)
-  //         .then(res => {
-  //           expect(res.body.message.errors[0].message).toMatch(/Email is already in use/);
-  //         });
-  //     });
-  // });
-
   test('Invalid password 1: Less than 8 characters', () => {
     const userToCreate = {
       email: 'user@wolox.com.ar',
@@ -48,8 +27,9 @@ describe('SignUp tests', () => {
     request(app)
       .post('/users')
       .send(userToCreate)
-      .then(() => {
+      .then(res => {
         expect(400);
+        expect(res.body.message).toMatch(/Invalid password/);
       });
   });
 
@@ -63,8 +43,9 @@ describe('SignUp tests', () => {
     request(app)
       .post('/users')
       .send(userToCreate)
-      .then(() => {
+      .then(res => {
         expect(400);
+        expect(res.body.message).toMatch(/Invalid password/);
       });
   });
 
@@ -111,6 +92,26 @@ describe('SignUp tests', () => {
       .then(res => {
         expect(400);
         expect(res.body.message).toMatch(/Please add last name/);
+      });
+  });
+
+  test('Email is already in use', () => {
+    const userToCreate = {
+      email: 'user@wolox.com.ar',
+      firstName: 'new',
+      lastName: 'user',
+      password: 'Asd123456'
+    };
+    request(app)
+      .post('/users')
+      .send(userToCreate)
+      .then(() => {
+        request(app)
+          .post('/users')
+          .send(userToCreate)
+          .then(res => {
+            expect(res.body.message).toMatch(/Email is already in use/);
+          });
       });
   });
 });
