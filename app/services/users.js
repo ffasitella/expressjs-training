@@ -22,3 +22,8 @@ exports.signUp = user =>
       }
       throw badRequestError(error.message);
     });
+
+exports.findByEmail = email =>
+  userModel.findOne({ where: email }).catch(error => {
+    throw defaultError(error);
+  });
